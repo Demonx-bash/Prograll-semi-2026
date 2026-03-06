@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F2F5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="#1A237E" />
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:id="@+id/tabAgua"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@android:color/white"
+                android:padding="20dp"
+                android:elevation="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recibo de Agua Potable"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A237E"
+                    android:layout_marginBottom="20dp"/>
+
+                <EditText
+                    android:id="@+id/etConsumo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Metros consumidos (m³)"
+                    android:inputType="numberDecimal"
+                    android:padding="15dp"/>
+
+                <Button
+                    android:id="@+id/btnCalcularAgua"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="CALCULAR PAGO"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="#2E7D32"/>
+
+                <TextView
+                    android:id="@+id/tvResAgua"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total: $0.00"
+                    android:textSize="24sp"
+                    android:textAlignment="center"
+                    android:layout_marginTop="30dp"
+                    android:textStyle="bold"
+                    android:textColor="#1B5E20"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tabArea"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@android:color/white"
+                android:padding="20dp"
+                android:elevation="4dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Conversor Universal de Área"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A237E"
+                    android:layout_marginBottom="15dp"/>
+
+                <EditText
+                    android:id="@+id/etValorArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Cantidad a convertir"
+                    android:inputType="numberDecimal" />
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="De:" android:layout_marginTop="10dp"/>
+                <Spinner android:id="@+id/spDeUnidad" android:layout_width="match_parent" android:layout_height="50dp" />
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="A:" android:layout_marginTop="10dp"/>
+                <Spinner android:id="@+id/spAUnidad" android:layout_width="match_parent" android:layout_height="50dp" />
+
+                <Button
+                    android:id="@+id/btnConvertirArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="CONVERTIR"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="#1565C0"/>
+
+                <TextView
+                    android:id="@+id/tvResArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Resultado: ---"
+                    android:textSize="22sp"
+                    android:textAlignment="center"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    android:textColor="#0D47A1" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+</TabHost>
