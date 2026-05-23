@@ -21,106 +21,107 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    EditText et_cod, et_des, et_tipo, et_med_org, et_sob;
-    TextView txt_eficiencia;
+    private EditText etCod, etDes, etTipo, etMedOrg, etSob;
+    private TextView txtEficiencia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Referencias de la UI
-        et_cod = findViewById(R.id.et_codigo);
-        et_des = findViewById(R.id.et_descripcion);
-        et_tipo = findViewById(R.id.et_tipo);
-        et_med_org = findViewById(R.id.et_medida_original);
-        et_sob = findViewById(R.id.et_sobrante);
-        txt_eficiencia = findViewById(R.id.txt_eficiencia_display);
+        etCod = findViewById(R.id.et_codigo);
+        etDes = findViewById(R.id.et_descripcion);
+        etTipo = findViewById(R.id.et_tipo);
+        etMedOrg = findViewById(R.id.et_medida_original);
+        etSob = findViewById(R.id.et_sobrante);
+        txtEficiencia = findViewById(R.id.txt_eficiencia_display);
 
-        // Botón Registrar (Entrada y Merma)
         findViewById(R.id.btn_registrar).setOnClickListener(v -> guardar());
-
-        // Botón Buscar individual
         findViewById(R.id.btn_buscar).setOnClickListener(v -> buscar());
-
-        // Botón Eliminar
         findViewById(R.id.btn_eliminar).setOnClickListener(v -> eliminar());
 
-        // Botón para ver el Catálogo de Segunda Vida
-        findViewById(R.id.btn_ver_catalogo).setOnClickListener(v -> {
-            startActivity(new Intent(this, CatalogoActivity.class));
-        });
+        findViewById(R.id.btn_ver_catalogo).setOnClickListener(v ->
+                startActivity(new Intent(this, CatalogoActivity.class)));
+
+        findViewById(R.id.btn_ver_bodega).setOnClickListener(v ->
+                startActivity(new Intent(this, BodegaActivity.class)));
     }
 
     public void guardar() {
-        String cod = et_cod.getText().toString();
-        String des = et_des.getText().toString();
-        String med = et_med_org.getText().toString();
-        String sob = et_sob.getText().toString();
+        String cod = etCod.getText().toString().trim();
+        String des = etDes.getText().toString().trim();
+        String tipo = etTipo.getText().toString().trim();
+        String med = etMedOrg.getText().toString().trim();
+        String sob = etSob.getText().toString().trim();
 
-        if(cod.isEmpty() || med.isEmpty() || sob.isEmpty()){
-            Toast.makeText(this, "Complete los campos para calcular merma", Toast.LENGTH_SHORT).show();
+        if(cod.isEmpty() || med.isEmpty() || sob.isEmpty()) {
+            Toast.makeText(this, "Campos técnicos obligatorios vacíos", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // LÓGICA DE INNOVACIÓN: Cálculo de Aprovechamiento
         double mOrg = Double.parseDouble(med);
         double mSob = Double.parseDouble(sob);
         double aprovechamiento = 100 - ((mSob / mOrg) * 100);
         String resEficiencia = String.format(Locale.US, "%.1f%%", aprovechamiento);
 
-        // PANEL DE ALERTAS: Visualización dinámica (Punto 4 de rúbrica)
-        txt_eficiencia.setText("Aprovechamiento: " + resEficiencia);
+        txtEficiencia.setText("Aprovechamiento: " + resEficiencia);
+
+        // Algoritmo del Panel de Alertas Visuales
         if(aprovechamiento < 70) {
-            txt_eficiencia.setTextColor(Color.RED); // ALERTA: Mucha merma
-            Toast.makeText(this, "¡Alerta de desperdicio alto!", Toast.LENGTH_SHORT).show();
+            txtEficiencia.setBackgroundColor(Color.parseColor("#F8D7DA"));
+            txtEficiencia.setTextColor(Color.parseColor("#721C24"));
+            Toast.makeText(this, "ALERTA: Alto índice de desperdicio", Toast.LENGTH_SHORT).show();
         } else {
-            txt_eficiencia.setTextColor(Color.parseColor("#198754")); // Verde: Eficiente
+            txtEficiencia.setBackgroundColor(Color.parseColor("#D1E7DD"));
+            txtEficiencia.setTextColor(Color.parseColor("#0F5132"));
         }
 
-        // 1. Guardar en SQLite (Local)
+        // PERSISTENCIA LOCAL (SQLite)
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this);
-        SQLiteDatabase db = admin.getWritableDatabase();
-        ContentValues reg = new ContentValues();
-        reg.put("codigo", cod);
-        reg.put("descripcion", des);
-        reg.put("medida_original", med);
-        reg.put("sobrante", sob);
-        reg.put("eficiencia", resEficiencia);
+        try (SQLiteDatabase db = admin.getWritableDatabase()) {
+            ContentValues reg = new ContentValues();
+            reg.put("codigo", cod);
+            reg.put("descripcion", des + " (" + tipo + ")");
+            reg.put("sobrante", (int) mSob);
+            reg.put("eficiencia", resEficiencia);
 
-        db.replace("materiales", null, reg);
-        db.close();
+            db.replace("materiales", null, reg);
+            Toast.makeText(this, "Material registrado localmente", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error al guardar en SQLite", Toast.LENGTH_SHORT).show();
+        }
 
-        // 2. Sincronizar con la Nube (Punto de integración)
-        sincronizarNube(cod, des, med, sob, resEficiencia);
+        // ✅ EJECUCIÓN CONECTADA A LA NUBE
+        sincronizarNube(cod, des, tipo, med, sob, resEficiencia);
         limpiarCampos();
     }
 
     public void buscar() {
-        String cod = et_cod.getText().toString();
-        if(cod.isEmpty()){
-            Toast.makeText(this, "Ingrese código para buscar", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        String cod = etCod.getText().toString().trim();
+        if(cod.isEmpty()) return;
 
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this);
         SQLiteDatabase db = admin.getReadableDatabase();
-        Cursor fila = db.rawQuery("select descripcion, medida_original, sobrante, eficiencia from materiales where codigo='" + cod + "'", null);
+
+        Cursor fila = db.rawQuery("select descripcion, sobrante, eficiencia from materiales where codigo='" + cod + "'", null);
 
         if(fila.moveToFirst()){
-            et_des.setText(fila.getString(0));
-            et_med_org.setText(fila.getString(1));
-            et_sob.setText(fila.getString(2));
-            txt_eficiencia.setText("Aprovechamiento: " + fila.getString(3));
-            Toast.makeText(this, "Material encontrado", Toast.LENGTH_SHORT).show();
+            etDes.setText(fila.getString(0));
+            etTipo.setText("General");
+            etMedOrg.setText("0");
+            etSob.setText(fila.getString(1));
+            txtEficiencia.setText("Aprovechamiento registrado: " + fila.getString(2));
+            txtEficiencia.setBackgroundColor(Color.parseColor("#E9ECEF"));
+            txtEficiencia.setTextColor(Color.BLACK);
         } else {
-            Toast.makeText(this, "No existe el material en bodega", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "El código no existe en el inventario", Toast.LENGTH_SHORT).show();
         }
         db.close();
     }
 
     public void eliminar() {
-        String cod = et_cod.getText().toString();
+        String cod = etCod.getText().toString().trim();
         if(cod.isEmpty()) return;
 
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this);
@@ -129,43 +130,53 @@ public class MainActivity extends AppCompatActivity {
         db.close();
 
         if (cant == 1) {
-            Toast.makeText(this, "Material retirado de inventario", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Material eliminado correctamente", Toast.LENGTH_SHORT).show();
             limpiarCampos();
         } else {
-            Toast.makeText(this, "No se encontró el código", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Código no encontrado", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void limpiarCampos() {
-        et_cod.setText("");
-        et_des.setText("");
-        et_med_org.setText("");
-        et_sob.setText("");
-        et_tipo.setText("");
+        etCod.setText(""); etDes.setText(""); etTipo.setText(""); etMedOrg.setText(""); etSob.setText("");
     }
 
-    private void sincronizarNube(String cod, String des, String med, String sob, String ef) {
+    // ✅ MÉTODO CORREGIDO Y COMPATIBLE CON COUCHDB 2.X / 3.X
+    private void sincronizarNube(String cod, String des, String tipo, String med, String sob, String ef) {
         try {
             JSONObject json = new JSONObject();
             json.put("descripcion", des);
+            json.put("tipo_material", tipo);
             json.put("medida_total", med);
             json.put("sobrante_merma", sob);
-            json.put("aprovechamiento", ef);
+            json.put("indice_aprovechamiento", ef);
 
-            RequestQueue queue = Volley.newRequestQueue(this);
-            JsonObjectRequest req = new JsonObjectRequest(Request.Method.PUT, Config.URL_COUCHDB + cod, json,
-                    res -> Toast.makeText(this, "Sincronizado con InduSave Cloud", Toast.LENGTH_SHORT).show(),
-                    err -> Toast.makeText(this, "Guardado Local (Offline)", Toast.LENGTH_SHORT).show()
+            // Se concatena la URL base con el ID único del documento (el código del material)
+            String urlFinal = Config.URL_COUCHDB + cod;
+
+            JsonObjectRequest req = new JsonObjectRequest(Request.Method.PUT, urlFinal, json,
+                    res -> Toast.makeText(MainActivity.this, "☁️ ¡Sincronizado con Éxito (Cloud CouchDB)!", Toast.LENGTH_LONG).show(),
+                    err -> Toast.makeText(MainActivity.this, "⚠️ Modo Offline: Guardado solo en SQLite", Toast.LENGTH_LONG).show()
             ) {
                 @Override
                 public Map<String, String> getHeaders() {
                     Map<String, String> headers = new HashMap<>();
-                    String auth = "Basic " + Base64.encodeToString((Config.USUARIO + ":" + Config.PASS).getBytes(), Base64.NO_WRAP);
+                    // Autenticación básica sin saltos de línea destructivos
+                    String credenciales = Config.USUARIO + ":" + Config.PASS;
+                    String auth = "Basic " + Base64.encodeToString(credenciales.getBytes(), Base64.NO_WRAP);
+
                     headers.put("Authorization", auth);
+                    headers.put("Content-Type", "application/json"); // 👈 ESTO EVITA QUE REBOTE LA PETICIÓN
                     return headers;
                 }
             };
+
+            // Se usa el ApplicationContext global para que la petición no se cancele al limpiar la pantalla
+            RequestQueue queue = Volley.newRequestQueue(this.getApplicationContext());
             queue.add(req);
-        } catch (Exception e) { e.printStackTrace(); }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

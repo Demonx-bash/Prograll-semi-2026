@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F9FBFC">
+
+    <TextView
+        android:id="@+id/tv_titulo_mis_pedidos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="📦 MIS SOLICITUDES DE MATERIAL"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#1565C0"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Toca un pedido cuando haya llegado físicamente a tu área para confirmar la entrega y consumirlo."
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#1565C0"
+        android:layout_marginBottom="16dp"/>
+
+    <ListView
+        android:id="@+id/lv_mis_pedidos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#E0E0E0"
+        android:dividerHeight="1dp"
+        android:footerDividersEnabled="false" />
+
+</LinearLayout>

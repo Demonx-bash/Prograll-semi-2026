@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F9FA">
@@ -11,192 +10,141 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <RelativeLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Panel de Control Industrial"
+            android:textColor="#0D6EFD"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Registro de Entrada y Control de Merma"
+            android:textColor="#6C757D"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/txt_eficiencia_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp">
+            android:text="Estado: Esperando datos de planta..."
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="#E9ECEF"
+            android:padding="15dp"
+            android:layout_marginBottom="20dp" />
 
-            <TextView
-                android:id="@+id/lbl_titulo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="InduSave"
-                android:textColor="#0D6EFD"
-                android:textSize="28sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lbl_titulo"
-                android:text="Panel de Control de Recursos"
-                android:textColor="#6C757D"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:id="@+id/btn_ver_catalogo"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_menu_sort_by_size"
-                app:tint="#0D6EFD" />
-        </RelativeLayout>
-
-        <androidx.cardview.widget.CardView
+        <EditText
+            android:id="@+id/et_codigo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="4dp">
+            android:layout_height="50dp"
+            android:hint="Código Único de Material (ID)"
+            android:inputType="text"
+            android:background="@android:drawable/editbox_background"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="12dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <TextView
-                    android:id="@+id/txt_eficiencia_display"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Aprovechamiento: 0.0%"
-                    android:textColor="#212529"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Indicador de eficiencia de merma"
-                    android:textColor="#ADB5BD"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
+        <EditText
+            android:id="@+id/et_descripcion"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="#FFFFFF"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="2dp">
+            android:layout_height="50dp"
+            android:hint="Descripción (ej. Lámina de Alumio 2x4)"
+            android:inputType="text"
+            android:background="@android:drawable/editbox_background"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="12dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
+        <EditText
+            android:id="@+id/et_tipo"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Tipo de Material (Metal, Madera, PVC)"
+            android:inputType="text"
+            android:background="@android:drawable/editbox_background"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="12dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:text="DATOS DEL MATERIAL"
-                    android:textColor="#495057"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+        <EditText
+            android:id="@+id/et_medida_original"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Dimensión/Peso Original Total"
+            android:inputType="numberDecimal"
+            android:background="@android:drawable/editbox_background"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="12dp" />
 
-                <EditText
-                    android:id="@+id/et_codigo"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="@android:drawable/editbox_background"
-                    android:hint="Código Serial / QR"
-                    android:paddingLeft="15dp" />
-
-                <EditText
-                    android:id="@+id/et_descripcion"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="@android:drawable/editbox_background"
-                    android:hint="Descripción (Ej. Varilla de Acero)"
-                    android:paddingLeft="15dp" />
-
-                <EditText
-                    android:id="@+id/et_tipo"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="@android:drawable/editbox_background"
-                    android:hint="Categoría (Metal, Madera, PVC)"
-                    android:paddingLeft="15dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="2">
-
-                    <EditText
-                        android:id="@+id/et_medida_original"
-                        android:layout_width="0dp"
-                        android:layout_height="55dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:background="@android:drawable/editbox_background"
-                        android:hint="Largo Total"
-                        android:inputType="numberDecimal"
-                        android:paddingLeft="15dp" />
-
-                    <EditText
-                        android:id="@+id/et_sobrante"
-                        android:layout_width="0dp"
-                        android:layout_height="55dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:background="@android:drawable/editbox_background"
-                        android:hint="Merma"
-                        android:inputType="numberDecimal"
-                        android:paddingLeft="15dp" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        <EditText
+            android:id="@+id/et_sobrante"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Dimensión/Peso del Sobrante (Merma)"
+            android:inputType="numberDecimal"
+            android:background="@android:drawable/editbox_background"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="20dp" />
 
         <Button
             android:id="@+id/btn_registrar"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#0D6EFD"
-            android:text="REGISTRAR Y SINCRONIZAR"
+            android:layout_height="50dp"
+            android:text="CALCULAR Y REGISTRAR"
+            android:backgroundTint="#198754"
             android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            app:cornerRadius="10dp" />
+            android:layout_marginBottom="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:weightSum="2">
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginBottom="15dp">
 
             <Button
                 android:id="@+id/btn_buscar"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="55dp"
-                android:layout_marginEnd="5dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
-                android:text="BUSCAR"
-                android:textColor="#0D6EFD"
-                app:strokeColor="#0D6EFD" />
+                android:text="BUSCAR ID"
+                android:backgroundTint="#0D6EFD"
+                android:layout_marginRight="5dp"/>
 
             <Button
                 android:id="@+id/btn_eliminar"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="55dp"
-                android:layout_marginStart="5dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 android:text="ELIMINAR"
-                android:textColor="#DC3545"
-                app:strokeColor="#DC3545" />
+                android:backgroundTint="#DC3545"
+                android:layout_marginLeft="5dp"/>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DEE2E6"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+        <Button
+            android:id="@+id/btn_ver_catalogo"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="VER MARKETPLACE SEGUNDA VIDA"
+            android:backgroundTint="#6C757D"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="10dp" />
+
+        <Button
+            android:id="@+id/btn_ver_bodega"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="IR A MIS PEDIDOS / BODEGA"
+            android:backgroundTint="#0D6EFD"
+            android:textColor="#FFFFFF"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
     </LinearLayout>
 </ScrollView>

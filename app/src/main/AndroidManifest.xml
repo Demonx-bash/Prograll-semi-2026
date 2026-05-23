@@ -7,16 +7,12 @@
 
     <application
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Indusave"
-
         android:usesCleartextTraffic="true"
-
         tools:targetApi="31">
 
         <activity
@@ -28,15 +24,14 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+        <activity android:name=".MainActivity" android:exported="false" />
+        <activity android:name=".CatalogoActivity" android:exported="false" />
+        <activity android:name=".BodegaActivity" android:exported="false" />
 
-        <activity
-            android:name=".CatalogoActivity"
-            android:exported="false"
-            android:label="Inventario InduSave" />
+        <activity android:name=".MenuAdminActivity" android:exported="false" />
+        <activity android:name=".MenuOperarioActivity" android:exported="false" />
+        <activity android:name=".InventarioGlobalActivity" android:exported="false" />
+        <activity android:name=".MisPedidosActivity" android:exported="false" />
 
     </application>
-
 </manifest>
